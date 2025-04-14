@@ -1,0 +1,104 @@
+\documentclass[11pt ]{article}
+\setlength{\textwidth}{14 true cm} \setlength{\textheight}{20 true cm}
+
+\usepackage{fontspec}
+\setmainfont{Source Sans Pro}[
+    UprightFont=*-Regular,
+    BoldFont=*-Bold,
+    ItalicFont=*-Italic,
+    BoldItalicFont=*-BoldItalic,
+    WordSpace=1.05,    % Increase space between words
+    LetterSpace=0.5    % Increase space between letters
+]
+
+% You can also adjust line spacing:
+\usepackage{setspace}
+\setstretch{1.05}     % Increases line spacing by 20%
+
+\setlength{\parskip}{1.2ex plus 0.2ex minus 0.2ex}
+
+\usepackage{geometry}
+\geometry{top=1in,bottom=1in,left=1in,right=1in}
+\usepackage{amscd,amsmath}
+\usepackage{enumerate}
+
+\begin{document}
+
+\large\noindent
+\textbf{Problem Set 3: Dynamics}\\
+PhD Empirical Methods, Winter 2025\\
+Due Tuesday March 11, 2025 (11:59PM)
+
+\vspace{2em}\noindent
+This problem set is designed to help you to understand the NFP, CCP, and Pakes '86 algorithm for estimation of single agent dynamic discrete choice models.
+
+\section{Model}
+As in Rust (1987), firms use machines to produce output. Older machines are more likely to break down and in each period the operator has the option of replacing the machine. Let $a_t$ be the age of the machine at time $t$ and the let the current flow payoff, given state $a_t$, action $i_t$ and shocks $\epsilon_{0t}, \epsilon_{1t}$, be
+\[ \Pi(a_t, i_t, \varepsilon_{0t}, \epsilon_{1t}) = \left\{ \begin{array}{ll}
+         R + \varepsilon_{1t} & \mbox{if $i_t$=1}\\
+        \mu a_t +\varepsilon_{0t} & \mbox{if $i_t$=0}.\end{array} \right. \] 
+ where $i_t = 1$ if the firm decides to replace the machine at $t$, $R$ is the cost of the new machine, and $\epsilon_{0t}, \epsilon_{1t}$ are time-specific shocks to the pay-offs from not replacing and replacing respectively. 
+
+Assume $\epsilon_{0t}, \epsilon_{1t}$ are iid T1EV errors. Assume a simple law of motion for the age state
+
+\[ a_{t+1} = \left\{ \begin{array}{ll}
+       1 & \mbox{if $i_t$=1}\\
+       min\{5, a_t + 1\}  & \mbox{if $i_t$=0}.\end{array} \right. \] 
+
+That is, if not replaced, the machine ages by one year up to a maximum of 5 years. After 5 years, the machine's age is fixed at 5 until replacement. If replaced in the current year, the machine's age next year is 1. Note that $i_t = 1$ is a renewal action because $a_{t+1}(i_t = 1, a_t) = a_{t+1}(i_t = 1) = 1$. Also note that the law of motion is deterministic. 
+
+\section{Exercises}
+The goal is to estimate $\theta \equiv \{\mu, R\}$
+\begin{enumerate}
+        \item  Write down the sequence problem for the firm.
+        \item  Write down Bellman's equation for the value function of the firm. - $V(.; \theta) = f(V(.; \theta))$ where $V(.; \theta)$ is a $5 \times 1$ vector . Express the value function in terms of choice-specific conditional value functions $\bar V_0(.,\theta)$ and $\bar V_1(.,\theta)$ . 
+        \item \textbf{Contraction Mapping}: Solve this dynamic programming problem through value function iteration given parameter values $(\mu, R)=(-1,-3)$. Assume $\beta=0.9$. The mapping should iterate on the two choice-specific conditional value functions. Recall that the logit-error assumption implies an analytic solution to the expectation of the max in these equations (the ``logsum" formula), and that Euler's constant is approximately $0.5775$.
+        \begin{enumerate}
+                \item Suppose $a_{t}=2$. For what value of $\epsilon_{0 t}-\epsilon_{1 t}$ is the firm indifferent between replacing its machine and not? What is the probability (to an econometrician who doesn't observe the $\epsilon$ draws) that this firm will replace its machine? What is the value of a firm at state $\left\{a_{t}=4, \epsilon_{0 t}=1, \epsilon_{1 t}=1.5\right\} ?$
+        \end{enumerate}
+        \item \textbf{Simulate Data}: Generate a dataset of observable states $a_t$ and choices $i_t$ for $T=20,000$ periods from the model in (3). 
+        % Note that cross-sectional and longitudinal data points are perfect substitutes here. 
+        
+        \item Use the data from (4) to estimate $\theta$ using Rust's NFP approach.
+        \begin{enumerate}
+                \item Start with a guess of $\theta$. 
+                \item Solve for the choice-specific conditional value functions $\bar V_0(.,\theta)$ and $\bar V_1(.,\theta)$ using contraction mapping. 
+                \item Plug the $\bar V_0(.,\theta)$ and $\bar V_1(.,\theta)$ in the logit discrete choice formula to construct likelihood $P(a_t; \theta)$
+                \item Search over $\theta$ to maximise the likelihood objective function. 
+        \end{enumerate}
+        
+        \item Estimate $\theta$ using Hotz and Miller's CCP approach with forward simulation. 
+
+        % Below is guidance on how to estimate $\theta$ using analytical formulas (covered in the recitation) and forward simulation (covered in the lecture). You can use either. 
+        
+         \begin{enumerate}
+                 \item  Estimate the replacement probabilities at each state $\hat P(.)$ using the average replacement rate in the sample. (These estimates are non-parametric estimates of the replacement probabilities.)
+                 % \item \textbf{Analytical Formula} Express $\bar V_1(.,\theta) - \bar V_0(.,\theta)$ as a function of $P(.; \theta)$, by following the steps below. 
+                 % \begin{enumerate}
+                        
+                 %         \item Write out the expression for $\bar V_1(a_t,\theta) - \bar V_0(a_t,\theta)$ in terms of differences in current flow utilities and continuation values. 
+                 %         \item Write down the Arcidiacono-Miller inversion formula for this model. That is, write $V(a_t; \theta) - \bar V_1(a_t; \theta)$ as a function of $P(a_t; \theta)$. 
+                 %         \item Replace the continuation values $V(a_{t+1}(a_t, i_t); \theta)$ in (i) with expressions (in terms of $\bar V_1(a_{t+1}(a_t, i_t); \theta)$ and $P(a_{t+1}(a_t, i_t); \theta)$) from the inversion formula. 
+                 %         \item Express $\bar V_1(a_{t+1}(a_t, 1); \theta)$ and $\bar V_1(a_{t+1}(a_t, 0); \theta)$ as sums of period $t+1$ flow pay-off and continuation values. Differencing will make continuation value terms drop out because \[a_{t+2}(a_{t+1}((a_t, 1)), 1) = a_{t+2}(a_{t+1}((a_t, 0)), 1) = 1\]. 
+                 % \end{enumerate}
+                 % Plug-in the estimated replacement probabilities $\hat P (.)$ in the analytic formula for $\bar V_1(.,\theta) - \bar V_0(.,\theta)$.
+                 
+                \item \textbf{Forward Simulation} Compute $\bar V_{0}\left(. \theta \right)$ and $\bar V_{1}\left(. \theta \right)$ given estimated replacement probabilities. 
+                \begin{enumerate}
+
+                        \item Write down the conditional state transition matrices $F_{0}$ and $F_{1}$ (of $5 \times 5$ dimension), which represent the transition probabilities of the state conditional on the $\{0,1\}$ replacement choice. (Note that the law of motion is deterministic in this case, hence, $F_{0}$ and $F_{1}$ will be populated by $1$s and $0$s.)
+                        \item  Using the estimated replacement probabilities and the $F_{0}$ and $F_{1}$ matrices, calculate the unconditional state transition matrix (of $5 \times 5$ dimension). This unconditional matrix accounts for both the probability of replacement and the transition probabilities.
+                        \item  Write a procedure that (forward) simulates $\bar V_{0}\left(. \theta \right)$ and $\bar V_{1}\left(. \theta \right)$ using estimated replacement probabilities and unconditional transition probabilities. 
+                \end{enumerate}
+
+                \item Once you have $\bar V_1(.,\theta) - \bar V_0(.,\theta)$, proceed as in (5) - c,d. \footnote{Note that the likelihood you construct is only a ``pseudo''-likelihood in that it is a valid likelihood function only at the true parameter values. See Arcidiacono-Miller for details on the consistency of this estimator. }
+
+
+
+         \end{enumerate}
+
+        % \item I would like to contrast this with a backward induction method. But maybe next time. 
+      
+\end{enumerate}
+
+\end{document}

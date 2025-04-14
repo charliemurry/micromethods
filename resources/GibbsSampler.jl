@@ -17,7 +17,7 @@ sig = [3.0, 3.0]
 rho = 0.3
 
 # Setup simulation parameters
-animate = false
+animate = true
 if animate
     T = 100
     afterburn = 50
