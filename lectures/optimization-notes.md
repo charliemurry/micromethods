@@ -231,6 +231,7 @@ Where $θ$ is a $k$ dimensional vector.
 **Algorithm**
 1. Initialize $θ₀$
 2. Define Jacobian 
+   
 $$
 J(\theta)= 
 \begin{pmatrix}
@@ -239,12 +240,15 @@ J(\theta)=
 \frac{\partial f_N}{\partial\theta_1} & \dots & \frac{\partial f_N}{\partial\theta_k}
 \end{pmatrix}
 $$
+
 3. The gradient of $S(θ) = \sum_N J(θ)^{\top}f(θ)$.
 4. The Hessian is then 
+
 $$
 \mathcal{H}(θ) = J(θ)^{\top}J(θ) + \sum_N f_i(θ)\frac{∂^2 f_i}{∂θ∂θ^{⊤}}
 $$
-1. Approximate the Hessian by dropping the second term (to guarentee positive definite matrix). 
+
+5. Approximate the Hessian by dropping the second term (to guarentee positive definite matrix). 
 $$
 \mathcal{H}(θ) ≈ J(θ)^{\top}J(θ)
 $$
