@@ -249,14 +249,18 @@ $$
 $$
 
 5. Approximate the Hessian by dropping the second term (to guarentee positive definite matrix). 
+   
 $$
 \mathcal{H}(θ) ≈ J(θ)^{\top}J(θ)
 $$
-1. Search step is then
+
+6. Search step is then
+   
 $$
 d = - \big[J(θ)^{\top}J(θ)\big]^{-1}J(θ)^{\top}f(θ)
 $$
-1.  Repeat until convergence
+
+7.  Repeat until convergence
 
 ## Requirements
 - Continuous, twice-differentiable f(x,θ)
