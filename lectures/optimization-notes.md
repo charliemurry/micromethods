@@ -230,7 +230,15 @@ Where $θ$ is a $k$ dimensional vector.
 
 **Algorithm**
 1. Initialize $θ₀$
-2. Define Jacobian $J(\theta)= \begin{pmatrix} \frac{\partial f_1}{\partial\theta_1} & \dots & \frac{\partial f_1}{\partial\theta_k} \\ \vdots & \ddots & \vdots \\ \frac{\partial f_N}{\partial\theta_1} & \dots & \frac{\partial f_N}{\partial\theta_k} \end{pmatrix}$
+2. Define Jacobian 
+$$
+J(\theta)= 
+\begin{pmatrix}
+\frac{\partial f_1}{\partial\theta_1} & \dots & \frac{\partial f_1}{\partial\theta_k} \\\\
+\vdots & \ddots & \vdots \\\\
+\frac{\partial f_N}{\partial\theta_1} & \dots & \frac{\partial f_N}{\partial\theta_k}
+\end{pmatrix}
+$$
 3. The gradient of $S(θ) = \sum_N J(θ)^{\top}f(θ)$.
 4. The Hessian is then 
 $$
