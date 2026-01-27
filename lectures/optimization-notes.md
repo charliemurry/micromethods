@@ -224,7 +224,7 @@ Minimize a sum of squared residuals from a generalized residual function.
 # Nonlinear Least Squares (NLLS) Optimization
 
 **Objective Function**
-$S(θ) = min_θ \frac{1}{2} ∑_{i=1..N}(yᵢ - f(xᵢ,θ))²$
+$\min_θ S(θ) = \frac{1}{2} ∑_{i=1..N}(yᵢ - f(xᵢ,θ))²$
 
 Where $θ$ is a $k$ dimensional vector.
 
