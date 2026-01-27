@@ -231,28 +231,21 @@ Where $θ$ is a $k$ dimensional vector.
 **Algorithm**
 1. Initialize $θ₀$
 2. Define Jacobian 
-$
-J(\theta)= 
-\begin{pmatrix}
-\frac{\partial f_1}{\partial\theta_1} & \dots & \frac{\partial f_1}{\partial\theta_k}\\
-\vdots & \ddots & \vdots \\
-\frac{\partial f_N}{\partial\theta_1} & \dots & \frac{\partial f_N}{\partial\theta_k}
-\end{pmatrix}
-$
+   $$J(\theta)= \begin{pmatrix} \frac{\partial f_1}{\partial\theta_1} & \dots & \frac{\partial f_1}{\partial\theta_k} \\ \vdots & \ddots & \vdots \\ \frac{\partial f_N}{\partial\theta_1} & \dots & \frac{\partial f_N}{\partial\theta_k} \end{pmatrix}$$
 3. The gradient of $S(θ) = \sum_N J(θ)^{\top}f(θ)$.
 4. The Hessian is then 
 $$
 \mathcal{H}(θ) = J(θ)^{\top}J(θ) + \sum_N f_i(θ)\frac{∂^2 f_i}{∂θ∂θ^{⊤}}
 $$
-5. Approximate the Hessian by dropping the second term (to guarentee positive definite matrix). 
+1. Approximate the Hessian by dropping the second term (to guarentee positive definite matrix). 
 $$
 \mathcal{H}(θ) ≈ J(θ)^{\top}J(θ)
 $$
-6. Search step is then
+1. Search step is then
 $$
 d = - \big[J(θ)^{\top}J(θ)\big]^{-1}J(θ)^{\top}f(θ)
 $$
-7.  Repeat until convergence
+1.  Repeat until convergence
 
 ## Requirements
 - Continuous, twice-differentiable f(x,θ)
